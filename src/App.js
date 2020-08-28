@@ -1,24 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "./styles.css";
 
 export default function App() {
   const [activeDate, setActiveDate] = useState(new Date());
-  const months = [
-    "January",
-    "February",
-    "March",
-    "April",
-    "May",
-    "June",
-    "July",
-    "August",
-    "September",
-    "October",
-    "November",
-    "December"
-  ];
+  const [todayDate, setTodayDate] = useState(new Date());
+  todayDate.setHours("00");
+  todayDate.setMinutes("00");
+  todayDate.setSeconds("00");
 
-  const weekDays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"],
+  const months = [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
     nDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const generateMatrix = () => {
     var matrix = [];
@@ -43,40 +47,56 @@ export default function App() {
         matrix[row][col] = -1;
         if (row === 1 && col >= firstDay) {
           // Fill in rows only after the first day of the month
-          matrix[row][col] = counter++;
+
+          matrix[row][col] = new Date(year, month, counter);
+          counter++;
         } else if (row > 1 && counter <= maxDays) {
           // Fill in rows only if the counter's not greater than
           // the number of days in the month
-          matrix[row][col] = counter++;
+
+          matrix[row][col] = new Date(year, month, counter);
+          counter++;
+          //matrix[row][col] = counter++;
         }
       }
     }
-    console.log(matrix);
+
     return matrix;
   };
   var rows = [];
+
   rows = generateMatrix().map((row, rowIndex) => {
     var rowItems = row.map((item, colIndex) => {
       return (
-        <p
+        <span
           key={Math.random() * 100}
           style={{
             flex: 1,
-            height: 18,
-            textAlign: "center",
+            height: "16px",
+            padding: "16px",
+            width: "100%",
+            textAlign: "right",
             // Highlight header
             backgroundColor: rowIndex === 0 ? "#ddd" : "#fff",
             // Highlight Sundays
             color: colIndex === 0 ? "#a00" : "#000",
             // Highlight current date
-            fontWeight: item === activeDate.getDate() ? "bold" : ""
+            fontWeight: item.toString() === todayDate.toString() ? "bold" : ""
           }}
-          onPress={() => this._onPress(item)}
+          onClick={() => _onPress(item)}
         >
-          {item !== -1 ? item : ""}
-        </p>
+          {item !== -1
+            ? typeof item === "object"
+              ? item.getDate()
+              : item
+            : ""}
+        </span>
       );
     });
+    const _onPress = (item) => {
+      console.log(item, todayDate);
+    };
+
     return (
       <div
         style={{
@@ -91,7 +111,13 @@ export default function App() {
       </div>
     );
   });
-
+  const changeMonth = (n) => {
+    setActiveDate(new Date(activeDate.setMonth(activeDate.getMonth() + n)));
+  };
+  useEffect(() => {
+    console.log("test");
+    //generateMatrix();
+  });
   return (
     <div className="App">
       <div>
@@ -99,8 +125,12 @@ export default function App() {
         {activeDate.getFullYear()}
         {rows}
       </div>
-      <h1>Hello CodeSandbox {activeDate.toDateString()}</h1>
-      <h2>Start editing to see some magic happen!</h2>
+      <button title="Previous" onClick={() => changeMonth(-1)}>
+        prev
+      </button>
+      <button title="Next" onClick={() => changeMonth(+1)}>
+        Next
+      </button>
     </div>
   );
 }
