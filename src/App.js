@@ -4,6 +4,8 @@ import "./styles.css";
 export default function App() {
   const [activeDate, setActiveDate] = useState(new Date());
   const [todayDate, setTodayDate] = useState(new Date());
+  const [startDate, setStartDate] = useState(new Date("10/12/2020"));
+  const [endDate, setEndDate] = useState(new Date("12/8/2020"));
   todayDate.setHours("00");
   todayDate.setMinutes("00");
   todayDate.setSeconds("00");
@@ -24,12 +26,12 @@ export default function App() {
     ],
     weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
     nDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
-  const generateMatrix = () => {
+  const generateMatrix = (activeDateParam) => {
     var matrix = [];
     // Create header
     matrix[0] = weekDays;
-    var year = activeDate.getFullYear();
-    var month = activeDate.getMonth();
+    var year = activeDateParam.getFullYear();
+    var month = activeDateParam.getMonth();
 
     var firstDay = new Date(year, month, 1).getDay();
     var maxDays = nDays[month];
@@ -63,55 +65,55 @@ export default function App() {
 
     return matrix;
   };
-  var rows = [];
+  const generateCalender = (date) => {
+    var rows = [];
 
-  rows = generateMatrix().map((row, rowIndex) => {
-    var rowItems = row.map((item, colIndex) => {
+    rows = generateMatrix(date).map((row, rowIndex) => {
+      var rowItems = row.map((item, colIndex) => {
+        return (
+          <span
+            key={Math.random() * 100}
+            style={{
+              height: "16px",
+              padding: "16px",
+              width: "100%",
+              textAlign: "center",
+              // Highlight header
+              // backgroundColor: rowIndex === 0 ? "#ddd" : "#fff",
+              // Highlight Sundays
+              color: colIndex === 0 ? "#a00" : "#000",
+              // Highlight current date
+              backgroundColor:
+                item >= startDate && item <= endDate ? "lightgreen" : "",
+              fontWeight: item === todayDate ? "bold" : ""
+            }}
+            onClick={() => _onPress(item)}
+          >
+            {item !== -1
+              ? typeof item === "object"
+                ? item.getDate()
+                : item
+              : ""}
+          </span>
+        );
+      });
+      const _onPress = (item) => {
+        console.log(item, todayDate);
+      };
+
       return (
-        <span
-          key={Math.random() * 100}
+        <div
+          key={Math.random()}
           style={{
-            flex: 1,
-            height: "16px",
-            padding: "16px",
-            width: "100%",
-            textAlign: "right",
-            // Highlight header
-            backgroundColor: rowIndex === 0 ? "#ddd" : "#fff",
-            // Highlight Sundays
-            color: colIndex === 0 ? "#a00" : "#000",
-            // Highlight current date
-            fontWeight: item.toString() === todayDate.toString() ? "bold" : ""
+            display: "flex"
           }}
-          onClick={() => _onPress(item)}
         >
-          {item !== -1
-            ? typeof item === "object"
-              ? item.getDate()
-              : item
-            : ""}
-        </span>
+          {rowItems}
+        </div>
       );
     });
-    const _onPress = (item) => {
-      console.log(item, todayDate);
-    };
-
-    return (
-      <div
-        key={Math.random()}
-        style={{
-          flex: 1,
-          flexDirection: "row",
-          padding: 15,
-          justifyContent: "space-around",
-          alignItems: "center"
-        }}
-      >
-        {rowItems}
-      </div>
-    );
-  });
+    return rows;
+  };
   const changeMonth = (n) => {
     setActiveDate(new Date(activeDate.setMonth(activeDate.getMonth() + n)));
   };
@@ -119,12 +121,54 @@ export default function App() {
     console.log("test");
     //generateMatrix();
   });
+  const activeDateshow = activeDate;
   return (
     <div className="App">
-      <div>
-        {months[activeDate.getMonth()]} &nbsp;
-        {activeDate.getFullYear()}
-        {rows}
+      <div style={{ display: "flex" }}>
+        <div style={{ width: "32%", flex: "0 0 32%" }}>
+          {months[activeDate.getMonth() - 1]} &nbsp;
+          {activeDate.getFullYear()}
+          {generateCalender(
+            new Date(
+              activeDate.getMonth() +
+                "/" +
+                activeDate.getDate() +
+                "/" +
+                activeDate.getFullYear()
+            )
+          )}
+        </div>
+        <div style={{ width: "1%", flex: "0 0 1%" }}></div>
+        <div style={{ width: "32%", flex: "0 0 32%" }}>
+          {months[activeDate.getMonth()]} &nbsp;
+          {activeDate.getFullYear()}
+          {generateCalender(
+            new Date(
+              activeDate.getMonth() +
+                1 +
+                "/" +
+                activeDate.getDate() +
+                "/" +
+                activeDate.getFullYear()
+            )
+          )}
+        </div>
+        <div style={{ width: "1%", flex: "0 0 1%" }}></div>
+        <div style={{ width: "32%", flex: "0 0 32%" }}>
+          {months[activeDate.getMonth() + 1]} &nbsp;
+          {activeDate.getFullYear()}
+          {generateCalender(
+            new Date(
+              activeDate.getMonth() +
+                2 +
+                "/" +
+                activeDate.getDate() +
+                "/" +
+                activeDate.getFullYear()
+            )
+          )}
+        </div>
+        <div style={{ width: "1%", flex: "0 0 1%" }}></div>
       </div>
       <button title="Previous" onClick={() => changeMonth(-1)}>
         prev
