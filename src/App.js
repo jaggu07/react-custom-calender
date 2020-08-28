@@ -99,6 +99,7 @@ export default function App() {
 
     return (
       <div
+        key={Math.random()}
         style={{
           flex: 1,
           flexDirection: "row",

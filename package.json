@@ -1,7 +1,7 @@
 {
-  "name": "react-calender",
+  "name": "react-custom-static-calender",
   "version": "1.0.0",
-  "description": "",
+  "description": "static calender with selected date",
   "keywords": [],
   "main": "src/index.js",
   "dependencies": {
