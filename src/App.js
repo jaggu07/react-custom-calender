@@ -6,25 +6,12 @@ export default function App() {
   const [todayDate, setTodayDate] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date("10/12/2020"));
   const [endDate, setEndDate] = useState(new Date("12/8/2020"));
+
   todayDate.setHours("00");
   todayDate.setMinutes("00");
   todayDate.setSeconds("00");
 
-  const months = [
-      "January",
-      "February",
-      "March",
-      "April",
-      "May",
-      "June",
-      "July",
-      "August",
-      "September",
-      "October",
-      "November",
-      "December"
-    ],
-    weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
+  const weekDays = ["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"],
     nDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   const generateMatrix = (activeDateParam) => {
     var matrix = [];
@@ -71,21 +58,35 @@ export default function App() {
     rows = generateMatrix(date).map((row, rowIndex) => {
       var rowItems = row.map((item, colIndex) => {
         return (
-          <span
+          <p
             key={Math.random() * 100}
             style={{
-              height: "16px",
+              // height: "16px",
               padding: "16px",
               width: "100%",
               textAlign: "center",
               // Highlight header
               // backgroundColor: rowIndex === 0 ? "#ddd" : "#fff",
               // Highlight Sundays
-              color: colIndex === 0 ? "#a00" : "#000",
+              color:
+                item.toString() === todayDate.toString() ||
+                (item >= startDate && item <= endDate)
+                  ? "white"
+                  : "06041d",
+              opacity:
+                item.toString() === todayDate.toString() ||
+                (item >= startDate && item <= endDate)
+                  ? "1"
+                  : "0.4",
               // Highlight current date
               backgroundColor:
-                item >= startDate && item <= endDate ? "lightgreen" : "",
-              fontWeight: item === todayDate ? "bold" : ""
+                item >= startDate && item <= endDate
+                  ? "lightgreen"
+                  : item.toString() === todayDate.toString()
+                  ? "grey"
+                  : "",
+
+              marginBottom: "0"
             }}
             onClick={() => _onPress(item)}
           >
@@ -94,7 +95,7 @@ export default function App() {
                 ? item.getDate()
                 : item
               : ""}
-          </span>
+          </p>
         );
       });
       const _onPress = (item) => {
@@ -114,68 +115,62 @@ export default function App() {
     });
     return rows;
   };
+
   const changeMonth = (n) => {
-    setActiveDate(new Date(activeDate.setMonth(activeDate.getMonth() + n)));
+    setActiveDate(
+      activeDate.getMonth() + n === 12
+        ? new Date(activeDate.getFullYear() + n, 0, 1)
+        : activeDate.getMonth() + n === -1
+        ? new Date(activeDate.getFullYear() + n, 11, 1)
+        : new Date(activeDate.getFullYear(), activeDate.getMonth() + n, 1)
+    );
   };
-  useEffect(() => {
-    console.log("test");
-    //generateMatrix();
-  });
-  const activeDateshow = activeDate;
+  //const count = 3;
+
+  const prevCalender = () => {
+    return activeDate.getMonth() - 1 === -1
+      ? new Date(activeDate.getFullYear() - 1, 11, 1)
+      : new Date(activeDate.getFullYear(), activeDate.getMonth() - 1, 1);
+  };
+  const nextCalender = () => {
+    return activeDate.getMonth() + 1 === 12
+      ? new Date(activeDate.getFullYear() + 1, 0, 1)
+      : new Date(activeDate.getFullYear(), activeDate.getMonth() + 1, 1);
+  };
+
   return (
     <div className="App">
-      <div style={{ display: "flex" }}>
-        <div style={{ width: "32%", flex: "0 0 32%" }}>
-          {months[activeDate.getMonth() - 1]} &nbsp;
-          {activeDate.getFullYear()}
-          {generateCalender(
-            new Date(
-              activeDate.getMonth() +
-                "/" +
-                activeDate.getDate() +
-                "/" +
-                activeDate.getFullYear()
-            )
-          )}
+      <>
+        {/* {prevCalender().toDateString()}
+        <br />
+        {activeDate.toDateString()}
+        <br />
+        {nextCalender().toDateString()}
+        <br /> */}
+        <button title="Previous" onClick={() => changeMonth(-1)}>
+          prev
+        </button>
+        <button title="Next" onClick={() => changeMonth(+1)}>
+          Next
+        </button>
+      </>
+      <div className="row m-0">
+        <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
+          {prevCalender().toLocaleString("default", { month: "long" })} &nbsp;
+          {prevCalender().getFullYear()}
+          {generateCalender(prevCalender())}
         </div>
-        <div style={{ width: "1%", flex: "0 0 1%" }}></div>
-        <div style={{ width: "32%", flex: "0 0 32%" }}>
-          {months[activeDate.getMonth()]} &nbsp;
-          {activeDate.getFullYear()}
-          {generateCalender(
-            new Date(
-              activeDate.getMonth() +
-                1 +
-                "/" +
-                activeDate.getDate() +
-                "/" +
-                activeDate.getFullYear()
-            )
-          )}
+        <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
+          {activeDate.toLocaleString("default", { month: "long" })} &nbsp;
+          {prevCalender().getFullYear()}
+          {generateCalender(new Date(activeDate))}
         </div>
-        <div style={{ width: "1%", flex: "0 0 1%" }}></div>
-        <div style={{ width: "32%", flex: "0 0 32%" }}>
-          {months[activeDate.getMonth() + 1]} &nbsp;
-          {activeDate.getFullYear()}
-          {generateCalender(
-            new Date(
-              activeDate.getMonth() +
-                2 +
-                "/" +
-                activeDate.getDate() +
-                "/" +
-                activeDate.getFullYear()
-            )
-          )}
+        <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
+          {nextCalender().toLocaleString("default", { month: "long" })} &nbsp;
+          {nextCalender().getFullYear()}
+          {generateCalender(nextCalender())}
         </div>
-        <div style={{ width: "1%", flex: "0 0 1%" }}></div>
       </div>
-      <button title="Previous" onClick={() => changeMonth(-1)}>
-        prev
-      </button>
-      <button title="Next" onClick={() => changeMonth(+1)}>
-        Next
-      </button>
     </div>
   );
 }
