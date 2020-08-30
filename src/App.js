@@ -4,7 +4,7 @@ import "./styles.css";
 export default function App() {
   const [activeDate, setActiveDate] = useState(new Date());
   const [todayDate, setTodayDate] = useState(new Date());
-  const [startDate, setStartDate] = useState(new Date("10/12/2020"));
+  const [startDate, setStartDate] = useState(new Date("9/1/2020"));
   const [endDate, setEndDate] = useState(new Date("12/8/2020"));
   const [count, setCount] = useState(3);
 
@@ -81,12 +81,14 @@ export default function App() {
                   : "0.4",
               // Highlight current date
               backgroundColor:
-                item >= startDate && item <= endDate
+                new Date(item) >= new Date(startDate) &&
+                new Date(item) <= new Date(endDate)
                   ? "lightgreen"
                   : item.toString() === todayDate.toString()
                   ? "grey"
                   : "",
-
+              fontWeight:
+                item.toString() === todayDate.toString() ? "bold" : "",
               marginBottom: "0"
             }}
             onClick={() => _onPress(item)}
@@ -127,7 +129,7 @@ export default function App() {
     );
   };
 
-  const numbers = (min, max) => {
+  const generateArray = (min, max) => {
     return Array(max - min + 2)
       .join()
       .split(",")
@@ -135,9 +137,7 @@ export default function App() {
         return min + i;
       });
   };
-  useEffect(() => {
-    console.log(count);
-  });
+
   // const prevCalender = () => {
   //   return activeDate.getMonth() - 1 === -1
   //     ? new Date(activeDate.getFullYear() - 1, 11, 1)
@@ -155,45 +155,81 @@ export default function App() {
       ? new Date(activeDate.getFullYear() + 1, 0, 1)
       : new Date(activeDate.getFullYear(), activeDate.getMonth() + month, 1);
   };
+  const selectFromDate = (date) => {
+    if (new Date(date) < new Date(endDate)) {
+      setStartDate(new Date(date));
+    } else {
+      alert("From date greater form end date");
+    }
+  };
+  const selectEndDate = (date) => {
+    if (new Date(date) > new Date(startDate)) {
+      setEndDate(new Date(date));
+    } else {
+      alert("End date Lesser form from date");
+    }
+  };
   return (
     <div className="App">
       <div className="p-2">
-        <label className={"mr-2"}>Select number of months to display</label>
-        <input
-          min={0}
-          max={12}
-          type="number"
-          value={count}
-          onChange={(e) => setCount(e.target.value)}
-        />
-        <br />
-      </div>
-      <div className="d-flex ">
-        <button
-          className="m-2 btn btn-primary justify-self-start"
-          title="Previous"
-          onClick={() => changeMonth(-1)}
-        >
-          prev
-        </button>
-        <button
-          className="m-2 btn btn-primary justify-self-end"
-          title="Next"
-          onClick={() => changeMonth(+1)}
-        >
-          Next
-        </button>
+        <h1>React custom calender with highlighting selected date</h1>
+        <div className={"text-left m-auto col-l-4 col-sm-8 col-md-6 col-xl-4"}>
+          <label className={"m-2"}>Select number of months to display</label>
+          <input
+            min={0}
+            max={12}
+            type="number"
+            value={count}
+            onChange={(e) => setCount(e.target.value)}
+          />
+          <br />
+          <label className={"m-2"}>Highlight from date</label>
+          <input
+            type="date"
+            value={startDate.toISOString().substr(0, 10)}
+            onChange={(e) => {
+              selectFromDate(new Date(e.target.value));
+            }}
+          />
+          <br />
+          <label className={"m-2"}>Highlight till date</label>
+          <input
+            type="date"
+            value={endDate.toISOString().substr(0, 10)}
+            onChange={(e) => selectEndDate(new Date(e.target.value))}
+          />{" "}
+        </div>
       </div>
       <div className="row m-0">
-        {numbers(-1, count - 3).map((b) => {
+        <div className="col-6 justify-content-start">
+          <button
+            className="m-2 btn btn-primary float-left"
+            title="Previous"
+            onClick={() => changeMonth(-1)}
+          >
+            prev
+          </button>
+        </div>
+        <div className="col-6 justify-content-end">
+          <button
+            className="m-2 btn btn-primary float-right"
+            title="Next"
+            onClick={() => changeMonth(+1)}
+          >
+            Next
+          </button>
+        </div>
+      </div>
+      <div className="row m-0">
+        {generateArray(-1, count - 3).map((ele) => {
           return (
-            <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
-              {getDisplayCalender(b).toLocaleString("default", {
+            <div className="col-sm-12 col-md-12 col-l-4 col-xl-4">
+              {getDisplayCalender(ele).toLocaleString("default", {
                 month: "long"
-              })}{" "}
+              })}
               &nbsp;
-              {getDisplayCalender(b).getFullYear()}
-              {generateCalender(getDisplayCalender(b))}
+              {getDisplayCalender(ele).getFullYear()}
+              {generateCalender(getDisplayCalender(ele))}
             </div>
           );
         })}
@@ -215,6 +251,11 @@ export default function App() {
           {generateCalender(nextCalender())}
         </div>
       </div> */}
+      <div className="footerWrapper">
+        <p>
+          Code By <a href="http://jaggu07.github.io/">Jaggu07</a>
+        </p>
+      </div>
     </div>
   );
 }

@@ -2,3 +2,20 @@
   font-family: sans-serif;
   text-align: center;
 }
+.footerWrapper {
+  position: sticky;
+  bottom: 0;
+  margin: 0 auto;
+  width: 100%;
+  z-index: 9999;
+  background: black;
+  padding: 5px;
+}
+.footerWrapper p {
+  color: lightgreen;
+  margin-bottom: 0px;
+}
+.footerWrapper a {
+  color: white;
+  text-decoration: underline;
+}
