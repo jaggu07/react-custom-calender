@@ -6,6 +6,7 @@ export default function App() {
   const [todayDate, setTodayDate] = useState(new Date());
   const [startDate, setStartDate] = useState(new Date("10/12/2020"));
   const [endDate, setEndDate] = useState(new Date("12/8/2020"));
+  const [count, setCount] = useState(3);
 
   todayDate.setHours("00");
   todayDate.setMinutes("00");
@@ -125,36 +126,79 @@ export default function App() {
         : new Date(activeDate.getFullYear(), activeDate.getMonth() + n, 1)
     );
   };
-  //const count = 3;
 
-  const prevCalender = () => {
-    return activeDate.getMonth() - 1 === -1
+  const numbers = (min, max) => {
+    return Array(max - min + 2)
+      .join()
+      .split(",")
+      .map(function (e, i) {
+        return min + i;
+      });
+  };
+  useEffect(() => {
+    console.log(count);
+  });
+  // const prevCalender = () => {
+  //   return activeDate.getMonth() - 1 === -1
+  //     ? new Date(activeDate.getFullYear() - 1, 11, 1)
+  //     : new Date(activeDate.getFullYear(), activeDate.getMonth() - 1, 1);
+  // };
+  // const nextCalender = () => {
+  //   return activeDate.getMonth() + 1 === 12
+  //     ? new Date(activeDate.getFullYear() + 1, 0, 1)
+  //     : new Date(activeDate.getFullYear(), activeDate.getMonth() + 1, 1);
+  // };
+  const getDisplayCalender = (month) => {
+    return activeDate.getMonth() + month === -1
       ? new Date(activeDate.getFullYear() - 1, 11, 1)
-      : new Date(activeDate.getFullYear(), activeDate.getMonth() - 1, 1);
-  };
-  const nextCalender = () => {
-    return activeDate.getMonth() + 1 === 12
+      : activeDate.getMonth() + month === 12
       ? new Date(activeDate.getFullYear() + 1, 0, 1)
-      : new Date(activeDate.getFullYear(), activeDate.getMonth() + 1, 1);
+      : new Date(activeDate.getFullYear(), activeDate.getMonth() + month, 1);
   };
-
   return (
     <div className="App">
-      <>
-        {/* {prevCalender().toDateString()}
+      <div className="p-2">
+        <label className={"mr-2"}>Select number of months to display</label>
+        <input
+          min={0}
+          max={12}
+          type="number"
+          value={count}
+          onChange={(e) => setCount(e.target.value)}
+        />
         <br />
-        {activeDate.toDateString()}
-        <br />
-        {nextCalender().toDateString()}
-        <br /> */}
-        <button title="Previous" onClick={() => changeMonth(-1)}>
+      </div>
+      <div className="d-flex ">
+        <button
+          className="m-2 btn btn-primary justify-self-start"
+          title="Previous"
+          onClick={() => changeMonth(-1)}
+        >
           prev
         </button>
-        <button title="Next" onClick={() => changeMonth(+1)}>
+        <button
+          className="m-2 btn btn-primary justify-self-end"
+          title="Next"
+          onClick={() => changeMonth(+1)}
+        >
           Next
         </button>
-      </>
+      </div>
       <div className="row m-0">
+        {numbers(-1, count - 3).map((b) => {
+          return (
+            <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
+              {getDisplayCalender(b).toLocaleString("default", {
+                month: "long"
+              })}{" "}
+              &nbsp;
+              {getDisplayCalender(b).getFullYear()}
+              {generateCalender(getDisplayCalender(b))}
+            </div>
+          );
+        })}
+      </div>
+      {/* <div className="row m-0">
         <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
           {prevCalender().toLocaleString("default", { month: "long" })} &nbsp;
           {prevCalender().getFullYear()}
@@ -170,7 +214,7 @@ export default function App() {
           {nextCalender().getFullYear()}
           {generateCalender(nextCalender())}
         </div>
-      </div>
+      </div> */}
     </div>
   );
 }
