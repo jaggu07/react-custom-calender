@@ -253,7 +253,14 @@ export default function App() {
       </div> */}
       <div className="footerWrapper">
         <p>
-          Code By <a href="http://jaggu07.github.io/">Jaggu07</a>
+          Code By{" "}
+          <a
+            href="http://jaggu07.github.io/"
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            Jaggu07
+          </a>
         </p>
       </div>
     </div>
