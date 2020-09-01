@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import Calender from "react-custom-calender";
+import Calender from "./component/Calender";
 import './styles.css'
 const App = () => {
  
