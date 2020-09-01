@@ -1,24 +1,51 @@
 {
-  "name": "react-custom-static-calender",
-  "version": "1.0.0",
-  "description": "static calender with selected date",
-  "keywords": [],
-  "main": "src/index.js",
+  "name": "react-custom-calender",
+  "version": "1.0.2",
+  "description": "custom calender with highlighted selected date",
+  "babel": {
+    "presets": [
+      "@babel/preset-react"
+    ]
+  },
+  "main": "src/Calender.js",
+  "module": "dist/Calender.js",
+  "files": [
+    "dist",
+    "README.md"
+  ],
+  "repository": {
+      "type": "git",
+      "url": "git+https://github.com/jaggu07/react-custom-calender.git"
+    },
+  "keywords": [
+    "react",
+    "react custom calender",
+    "react calender",
+    "calender"
+  ],
+  "author": "Jagan R",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jaggu07/react-custom-calender/issues"
+  },
+  "homepage": "https://github.com/jaggu07/react-custom-calender#readme",
   "dependencies": {
-    "bootstrap": "4.5.2",
     "react": "16.12.0",
     "react-dom": "16.12.0",
-    "react-scripts": "3.0.1",
-    "styled-components": "5.1.1"
+    "react-scripts": "3.0.1"
   },
   "devDependencies": {
+    "@babel/cli": "^7.11.5",
+    "@babel/core": "^7.10.2",
+    "@babel/preset-react": "^7.10.4",
     "typescript": "3.8.3"
   },
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "publish:npm": "rm -rf dist && mkdir dist && babel ./src/component -d dist --copy-files"
   },
   "browserslist": [
     ">0.2%",
