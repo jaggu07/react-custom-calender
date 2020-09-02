@@ -1,22 +1,22 @@
 {
   "name": "react-custom-calender",
-  "version": "1.0.0",
+  "version": "1.1.2",
   "description": "custom calender with highlighted selected date",
   "babel": {
     "presets": [
       "@babel/preset-react"
     ]
   },
-  "main": "src/Calender.js",
+  "main": "dist/Calender.js",
   "module": "dist/Calender.js",
   "files": [
     "dist",
     "README.md"
   ],
   "repository": {
-      "type": "git",
-      "url": "git+https://github.com/jaggu07/react-custom-calender.git"
-    },
+    "type": "git",
+    "url": "git+https://github.com/jaggu07/react-custom-calender.git"
+  },
   "keywords": [
     "react",
     "react custom calender",
@@ -30,9 +30,9 @@
   },
   "homepage": "https://github.com/jaggu07/react-custom-calender#readme",
   "dependencies": {
-    "react": "16.12.0",
-    "react-dom": "16.12.0",
-    "react-scripts": "3.0.1"
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.11.5",
