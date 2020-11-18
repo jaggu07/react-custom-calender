@@ -2,9 +2,9 @@
 
 Custom calender with highlight selected date
 
-## Demo
+<!-- ## Demo
 
-See the working [Demo](https://kbct5.csb.app/)
+See the working [Demo](https://kbct5.csb.app/) -->
 
 ## Installation
 
@@ -12,18 +12,40 @@ See the working [Demo](https://kbct5.csb.app/)
 yarn add react-custom-calender
 
 ```
+
 ## Usage
 
 ```
 <Calender />
 ```
 
-## Props
+## Props Type
 
 ```
-fromDate => date object
-toDate => date object
-monthsToDisplay => integer (default=3)
+fromDate: PropTypes.instanceOf(Date),
+toDate: PropTypes.instanceOf(Date),
+monthsToDisplay: PropTypes.number,
+color: PropTypes.object,
+onNextIcon: PropTypes.element,
+onPrevIcon: PropTypes.element,
+
+```
+
+## Default props
+
+```
+fromDate: new Date(),
+toDate: new Date(),
+monthsToDisplay: 3,
+color: {
+  today: "gray",
+  selected: "white",
+  selectedBG: "lightgreen",
+  date: "06041d",
+  backgroundColor: "transparent",
+},
+onNextIcon: <></>,
+onPrevIcon: <></>,
 
 ```
 
