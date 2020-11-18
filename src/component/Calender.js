@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from "react";
 import "./Calender.css";
+import PropTypes from "prop-types";
 
-const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
+const Calender = ({
+  fromDate,
+  toDate,
+  monthsToDisplay,
+  color,
+  onNextIcon,
+  onPrevIcon,
+}) => {
   const [activeDate, setActiveDate] = useState(new Date());
   const [todayDate] = useState(new Date());
   const [startDate, setStartDate] = useState(fromDate);
@@ -55,18 +63,17 @@ const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
           <p
             key={Math.random() * 100}
             style={{
-              // height: "16px",
               padding: "16px",
               width: "100%",
               textAlign: "center",
               //Highlight header
-              //backgroundColor: rowIndex === 0 ? "#ddd" : "#fff",
+
               // Highlight Sundays
               color:
                 item.toString() === todayDate.toString() ||
                 (item >= startDate && item <= endDate)
-                  ? "white"
-                  : "06041d",
+                  ? color.selected
+                  : color.date,
               opacity:
                 item.toString() === todayDate.toString() ||
                 (item >= startDate && item <= endDate)
@@ -78,12 +85,11 @@ const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
                 new Date(item) >= new Date(startDate) &&
                 endDate &&
                 new Date(item) <= new Date(endDate)
-                  ? "lightgreen"
+                  ? color.selectedBG
                   : item.toString() === todayDate.toString()
-                  ? "grey"
+                  ? color.today
                   : "",
-              fontWeight:
-                item.toString() === todayDate.toString() ? "bold" : "",
+              fontWeight: item.toString() === todayDate.toString() && "bold",
               marginBottom: "0",
             }}
             onClick={() => _onPress(item)}
@@ -133,16 +139,6 @@ const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
       });
   };
 
-  // const prevCalender = () => {
-  //   return activeDate.getMonth() - 1 === -1
-  //     ? new Date(activeDate.getFullYear() - 1, 11, 1)
-  //     : new Date(activeDate.getFullYear(), activeDate.getMonth() - 1, 1);
-  // };
-  // const nextCalender = () => {
-  //   return activeDate.getMonth() + 1 === 12
-  //     ? new Date(activeDate.getFullYear() + 1, 0, 1)
-  //     : new Date(activeDate.getFullYear(), activeDate.getMonth() + 1, 1);
-  // };
   const getDisplayCalender = (month) => {
     return activeDate.getMonth() + month === -1
       ? new Date(activeDate.getFullYear() - 1, 11, 1)
@@ -159,26 +155,21 @@ const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
   return (
     <>
       <div className="row m-0">
-        <div className="col-6 justify-content-start">
-          <button
-            className="m-2 btn btn-primary float-left"
-            title="Previous"
-            onClick={() => changeMonth(-1)}
-          >
-            prev
-          </button>
+        <div className="col-6 d-flex justify-content-start">
+          <div className="cursor-pointer" onClick={() => changeMonth(-1)}>
+            {onPrevIcon}
+          </div>
         </div>
-        <div className="col-6 justify-content-end">
-          <button
-            className="m-2 btn btn-primary float-right"
-            title="Next"
-            onClick={() => changeMonth(+1)}
-          >
-            Next
-          </button>
+        <div className="col-6 d-flex justify-content-end">
+          <div className="cursor-pointer" onClick={() => changeMonth(+1)}>
+            {onNextIcon}
+          </div>
         </div>
       </div>
-      <div className="row m-0">
+      <div
+        className="row m-0 "
+        style={{ backgroundColor: color.backgroundColor }}
+      >
         {generateArray(-1, count - 3).map((ele) => {
           return (
             <div
@@ -195,24 +186,31 @@ const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
           );
         })}
       </div>
-      {/* <div className="row m-0">
-        <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
-          {prevCalender().toLocaleString("default", { month: "long" })} &nbsp;
-          {prevCalender().getFullYear()}
-          {generateCalender(prevCalender())}
-        </div>
-        <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
-          {activeDate.toLocaleString("default", { month: "long" })} &nbsp;
-          {prevCalender().getFullYear()}
-          {generateCalender(new Date(activeDate))}
-        </div>
-        <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
-          {nextCalender().toLocaleString("default", { month: "long" })} &nbsp;
-          {nextCalender().getFullYear()}
-          {generateCalender(nextCalender())}
-        </div>
-      </div> */}
     </>
   );
 };
 export default Calender;
+
+Calender.propTypes = {
+  fromDate: PropTypes.instanceOf(Date),
+  toDate: PropTypes.instanceOf(Date),
+  monthsToDisplay: PropTypes.number,
+  color: PropTypes.object,
+  onNextIcon: PropTypes.element,
+  onPrevIcon: PropTypes.element,
+};
+
+Calender.defaultProps = {
+  fromDate: new Date(),
+  toDate: new Date(),
+  monthsToDisplay: 3,
+  color: {
+    today: "gray",
+    selected: "white",
+    selectedBG: "lightgreen",
+    date: "06041d",
+    backgroundColor: "transparent",
+  },
+  onNextIcon: <></>,
+  onPrevIcon: <></>,
+};
