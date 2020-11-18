@@ -1,8 +1,7 @@
 import React, { useState } from "react";
 import Calender from "./component/Calender";
-import './styles.css'
+import "./styles.css";
 const App = () => {
- 
   const [startDate, setStartDate] = useState(new Date("10/2/2020"));
   const [endDate, setEndDate] = useState(new Date("11/3/2020"));
   const [count, setCount] = useState(3);
@@ -52,12 +51,22 @@ const App = () => {
           />{" "}
         </div>
       </div>
-      
+
       <>
         <Calender
           fromDate={startDate}
           toDate={endDate}
           monthsToDisplay={count}
+          onPrevIcon={
+            <button className=" btn btn-primary " title="Previous">
+              {"<"}
+            </button>
+          }
+          onNextIcon={
+            <button className="btn btn-primary " title="Previous">
+              {">"}
+            </button>
+          }
         />
       </>
 

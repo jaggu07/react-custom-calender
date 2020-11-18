@@ -1,17 +1,14 @@
 import React, { useState, useEffect } from "react";
 import "./Calender.css";
+import PropTypes from "prop-types";
 
 const Calender = ({
   fromDate,
   toDate,
-  monthsToDisplay = 3,
-  color = {
-    today: "gray",
-    selected: "white",
-    selectedBG: "lightgreen",
-    date: "06041d",
-    backgroundColor: "transparent",
-  },
+  monthsToDisplay,
+  color,
+  onNextIcon,
+  onPrevIcon,
 }) => {
   const [activeDate, setActiveDate] = useState(new Date());
   const [todayDate] = useState(new Date());
@@ -169,26 +166,21 @@ const Calender = ({
   return (
     <>
       <div className="row m-0">
-        <div className="col-6 justify-content-start">
-          <button
-            className="m-2 btn btn-primary float-left"
-            title="Previous"
-            onClick={() => changeMonth(-1)}
-          >
-            prev
-          </button>
+        <div className="col-6 d-flex justify-content-start">
+          <div className="cursor-pointer" onClick={() => changeMonth(-1)}>
+            {onPrevIcon}
+          </div>
         </div>
-        <div className="col-6 justify-content-end">
-          <button
-            className="m-2 btn btn-primary float-right"
-            title="Next"
-            onClick={() => changeMonth(+1)}
-          >
-            Next
-          </button>
+        <div className="col-6 d-flex justify-content-end">
+          <div className="cursor-pointer" onClick={() => changeMonth(+1)}>
+            {onNextIcon}
+          </div>
         </div>
       </div>
-      <div className="row m-0 " style={{ backgroundColor: color.backgroundColor }}>
+      <div
+        className="row m-0 "
+        style={{ backgroundColor: color.backgroundColor }}
+      >
         {generateArray(-1, count - 3).map((ele) => {
           return (
             <div
@@ -226,3 +218,27 @@ const Calender = ({
   );
 };
 export default Calender;
+
+Calender.propTypes = {
+  fromDate: PropTypes.instanceOf(Date),
+  toDate: PropTypes.instanceOf(Date),
+  monthsToDisplay: PropTypes.number,
+  color: PropTypes.object,
+  onNextIcon: PropTypes.element,
+  onPrevIcon: PropTypes.element,
+};
+
+Calender.defaultProps = {
+  fromDate: new Date(),
+  toDate: new Date(),
+  monthsToDisplay: 3,
+  color: {
+    today: "gray",
+    selected: "white",
+    selectedBG: "lightgreen",
+    date: "06041d",
+    backgroundColor: "transparent",
+  },
+  onNextIcon: <></>,
+  onPrevIcon: <></>,
+};
