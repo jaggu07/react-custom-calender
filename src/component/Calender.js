@@ -1,7 +1,18 @@
 import React, { useState, useEffect } from "react";
 import "./Calender.css";
 
-const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
+const Calender = ({
+  fromDate,
+  toDate,
+  monthsToDisplay = 3,
+  color = {
+    today: "gray",
+    selected: "white",
+    selectedBG: "lightgreen",
+    date: "06041d",
+    backgroundColor: "transparent",
+  },
+}) => {
   const [activeDate, setActiveDate] = useState(new Date());
   const [todayDate] = useState(new Date());
   const [startDate, setStartDate] = useState(fromDate);
@@ -65,8 +76,8 @@ const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
               color:
                 item.toString() === todayDate.toString() ||
                 (item >= startDate && item <= endDate)
-                  ? "white"
-                  : "06041d",
+                  ? color.selected
+                  : color.date,
               opacity:
                 item.toString() === todayDate.toString() ||
                 (item >= startDate && item <= endDate)
@@ -78,12 +89,11 @@ const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
                 new Date(item) >= new Date(startDate) &&
                 endDate &&
                 new Date(item) <= new Date(endDate)
-                  ? "lightgreen"
+                  ? color.selectedBG
                   : item.toString() === todayDate.toString()
-                  ? "grey"
+                  ? color.today
                   : "",
-              fontWeight:
-                item.toString() === todayDate.toString() ? "bold" : "",
+              fontWeight: item.toString() === todayDate.toString() && "bold",
               marginBottom: "0",
             }}
             onClick={() => _onPress(item)}
@@ -178,7 +188,7 @@ const Calender = ({ fromDate, toDate, monthsToDisplay = 3 }) => {
           </button>
         </div>
       </div>
-      <div className="row m-0">
+      <div className="row m-0 " style={{ backgroundColor: color.backgroundColor }}>
         {generateArray(-1, count - 3).map((ele) => {
           return (
             <div
