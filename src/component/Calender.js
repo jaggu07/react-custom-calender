@@ -63,12 +63,11 @@ const Calender = ({
           <p
             key={Math.random() * 100}
             style={{
-              // height: "16px",
               padding: "16px",
               width: "100%",
               textAlign: "center",
               //Highlight header
-              //backgroundColor: rowIndex === 0 ? "#ddd" : "#fff",
+
               // Highlight Sundays
               color:
                 item.toString() === todayDate.toString() ||
@@ -140,16 +139,6 @@ const Calender = ({
       });
   };
 
-  // const prevCalender = () => {
-  //   return activeDate.getMonth() - 1 === -1
-  //     ? new Date(activeDate.getFullYear() - 1, 11, 1)
-  //     : new Date(activeDate.getFullYear(), activeDate.getMonth() - 1, 1);
-  // };
-  // const nextCalender = () => {
-  //   return activeDate.getMonth() + 1 === 12
-  //     ? new Date(activeDate.getFullYear() + 1, 0, 1)
-  //     : new Date(activeDate.getFullYear(), activeDate.getMonth() + 1, 1);
-  // };
   const getDisplayCalender = (month) => {
     return activeDate.getMonth() + month === -1
       ? new Date(activeDate.getFullYear() - 1, 11, 1)
@@ -197,23 +186,6 @@ const Calender = ({
           );
         })}
       </div>
-      {/* <div className="row m-0">
-        <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
-          {prevCalender().toLocaleString("default", { month: "long" })} &nbsp;
-          {prevCalender().getFullYear()}
-          {generateCalender(prevCalender())}
-        </div>
-        <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
-          {activeDate.toLocaleString("default", { month: "long" })} &nbsp;
-          {prevCalender().getFullYear()}
-          {generateCalender(new Date(activeDate))}
-        </div>
-        <div className="col-sm-12 col-md-4 col-l-4 col-xl-4">
-          {nextCalender().toLocaleString("default", { month: "long" })} &nbsp;
-          {nextCalender().getFullYear()}
-          {generateCalender(nextCalender())}
-        </div>
-      </div> */}
     </>
   );
 };
